@@ -22,7 +22,13 @@ class Interpreter implements Expr.Visitor<Object> {
                 return (double)left < (double)right;
             case LESS_EQUAL:
                 return (double)left <= (double)right;
+            case BANG_EQUAL:
+                return !isEqual(left, right);
+            case EQUAL_EQUAL:
+                return isEqual(left, right);
+
             case MINUS:
+                checkNumberOperand(expr.operator, right);
                 return (double)left - (double)right;
             case PLUS:
                 if (left instanceof Double && right instanceof Double) {
@@ -70,10 +76,22 @@ class Interpreter implements Expr.Visitor<Object> {
         return null;
     }
 
+    private void checkNumberOperand(Token operator, Object operand) {
+        if (operand instanceof Double) return;
+        throw new RuntimeError(operator, "Operand must be a number.");
+    }
+
     private boolean isTruthy(Object object) {
         if (object == null) return false;
         if (object instanceof Boolean) return (boolean)object;
         return true;
+    }
+
+    private boolean isEqual(Object a, Object b) {
+        if ((a == null) && (b == null)) return true;
+        if (a == null) return false;
+
+        return a.equals(b);
     }
 
     private Object evaluate(Expr expr) {
