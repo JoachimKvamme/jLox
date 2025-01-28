@@ -28,6 +28,7 @@ public class Lox {
   static boolean hadRuntimeError = false;
 
 
+
 private static void runFile(String path) throws IOException {
     byte[] bytes = Files.readAllBytes(Paths.get(path));
     run(new String(bytes, Charset.defaultCharset()));
@@ -55,11 +56,11 @@ private static void runFile(String path) throws IOException {
     List<Token> tokens = scanner.scanTokens();
 
     Parser parser = new Parser(tokens);
-    Expr expression = parser.parse();
+    List<Stmt> statements = parser.parse();
 
     if (hadError) return;
 
-    interpreter.interpret(expression);
+    interpreter.interpret(statements);
 
     // System.out.println(new AstPrinter().print(expression));
 
