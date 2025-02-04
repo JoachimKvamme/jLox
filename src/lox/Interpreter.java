@@ -10,8 +10,9 @@ import lox.Lox;
 import lox.Stmt.Var;
 
 class Interpreter implements Expr.Visitor<Object>,
-                            Stmt.Visitor<Void>
-{
+                            Stmt.Visitor<Void> {
+                            
+    private Environment environment = new Environment();
 
     void interpret(List<Stmt> statements) {
         try {
@@ -158,15 +159,21 @@ class Interpreter implements Expr.Visitor<Object>,
         return null;
     }
 
+    @Override
+    public Void visitVarStmt(Stmt.Var stmt) {
+        Object value = null;
+        if (stmt.initializer != null) {
+            value = evaluate(stmt.initializer);
+        }
+
+        environment.define(stmt.name.lexeme, value);
+        return null;
+    }
+
     private void execute(Stmt stmt) {
         stmt.accept(this);
     }
 
-    @Override
-    public Void visitVarStmt(Var stmt) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'visitVarStmt'");
-    }
 
     @Override
     public Object visitVariableExpr(Variable expr) {
