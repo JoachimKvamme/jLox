@@ -1,6 +1,8 @@
 package lox;
 
 import java.util.List;
+
+import lox.Expr.Assign;
 import lox.Expr.Binary;
 import lox.Expr.Grouping;
 import lox.Expr.Literal;
@@ -170,14 +172,19 @@ class Interpreter implements Expr.Visitor<Object>,
         return null;
     }
 
+    @Override 
+    public Object visitVariableExpr(Expr.Variable expr) {
+        return environment.get(expr.name);
+    }
+
     private void execute(Stmt stmt) {
         stmt.accept(this);
     }
 
-
     @Override
-    public Object visitVariableExpr(Variable expr) {
+    public Object visitAssignExpr(Assign expr) {
         // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'visitVariableExpr'");
+        throw new UnsupportedOperationException("Unimplemented method 'visitAssignExpr'");
     }
+
 }
