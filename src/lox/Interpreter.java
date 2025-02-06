@@ -10,12 +10,14 @@ import lox.Expr.Unary;
 import lox.Expr.Variable;
 import lox.Lox;
 import lox.Stmt.Var;
+import lox.Stmt.block;
 
 class Interpreter implements Expr.Visitor<Object>,
                             Stmt.Visitor<Void> {
                             
     private Environment environment = new Environment();
 
+    
     void interpret(List<Stmt> statements) {
         try {
 
@@ -181,11 +183,29 @@ class Interpreter implements Expr.Visitor<Object>,
         stmt.accept(this);
     }
 
+    void executeBlock(List<Stmt> statements, Environment environment) {
+        Environment previous = this.environment;
+        try {
+            this.environment = environment;
+            for (Stmt statement : statements) {
+                execute(statement);
+            }
+        } finally {
+            this.environment = previous;
+        }
+    }
+
     @Override
     public Object visitAssignExpr(Expr.Assign expr) {
         Object value = evaluate(expr.value);
         environment.assign(expr.name, value);
         return value;
+    }
+
+    @Override
+    public Void visitblockStmt(Stmt.block stmt) {
+        executeBlock(stmt.statements, new Environment(environment));
+        return null;
     }
 
 }
