@@ -10,7 +10,8 @@ import lox.Expr.Unary;
 import lox.Expr.Variable;
 import lox.Lox;
 import lox.Stmt.Var;
-import lox.Stmt.block;
+import lox.Stmt.Block;
+import lox.Stmt.If;
 
 class Interpreter implements Expr.Visitor<Object>,
                             Stmt.Visitor<Void> {
@@ -203,9 +204,15 @@ class Interpreter implements Expr.Visitor<Object>,
     }
 
     @Override
-    public Void visitblockStmt(Stmt.block stmt) {
+    public Void visitBlockStmt(Stmt.Block stmt) {
         executeBlock(stmt.statements, new Environment(environment));
         return null;
+    }
+
+    @Override
+    public Void visitIfStmt(If stmt) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'visitIfStmt'");
     }
 
 }
