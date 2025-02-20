@@ -26,7 +26,7 @@ class Interpreter implements Expr.Visitor<Object>,
            public int arity() { return 0; }
            
            @Override
-           public Object call(Interpreter, 
+           public Object call(Interpreter interpreter, 
            List<Object> arguments) {
             return (double)System.currentTimeMillis() / 1000.0;
            }
@@ -209,6 +209,14 @@ class Interpreter implements Expr.Visitor<Object>,
     @Override 
     public Void visitExpressionStmt(Stmt.Expression stmt) {
         evaluate(stmt.expression);
+        return null;
+    }
+
+    @Override
+    public Void visitFunctionStmt(Stmt.Function stmt) {
+        LoxFunction function = new LoxFunction(stmt);
+
+        environment.define(stmt.name.lexeme, function);
         return null;
     }
 
