@@ -13,6 +13,7 @@ import lox.Stmt.Var;
 import lox.Stmt.Block;
 import lox.Stmt.If;
 import java.util.ArrayList;
+import java.util.List;
 
 class Interpreter implements Expr.Visitor<Object>,
                             Stmt.Visitor<Void> {
