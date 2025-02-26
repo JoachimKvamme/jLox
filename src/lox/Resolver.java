@@ -5,8 +5,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 
+import javax.swing.text.StyledEditorKit.BoldAction;
+
 class Resolver implements Expr.Visitor<Void>, Stmt.Visitor<Void> {
     private final Interpreter interpreter;
+    private final Stack<Map<String, Boolean>> scopes = new Stack<>();
 
     Resolver(Interpreter interpreter) {
         this.interpreter = interpreter;
@@ -28,6 +31,10 @@ class Resolver implements Expr.Visitor<Void>, Stmt.Visitor<Void> {
 
     private void beginScope() {
         scopes.push(new HashMap<String, Boolean>());
+    }
+
+    private void endScope() {
+        scopes.pop();
     }
 
     @Override
