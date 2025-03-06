@@ -71,8 +71,8 @@ public class Parser {
     }
 
     private Stmt statement() {
-        if (match(IF)) return ifStatement();
         if (match(FOR)) return forStatement();
+        if (match(IF)) return ifStatement();
         if (match(PRINT)) return printStatement();
         if (match(RETURN)) return returnStatement();
         if (match(WHILE)) return whileStatement();
@@ -134,7 +134,7 @@ public class Parser {
         if (condition == null) condition = new Expr.Literal(true);
         body = new Stmt.While(condition, body);
 
-        if (initializer == null) {
+        if (initializer != null) {
             body = new Stmt.Block(Arrays.asList(initializer, body));
         }
 
