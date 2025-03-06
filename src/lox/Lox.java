@@ -7,6 +7,8 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
+import lox.Interpreter;
+import lox.Token;
 
 public class Lox {
 
@@ -21,7 +23,7 @@ public class Lox {
     }
   }
 
-  private static final Interpreter interpreter = new Interpreter(); 
+  private static final lox.Interpreter interpreter = new Interpreter(); 
 
 
   static boolean hadError = false;
