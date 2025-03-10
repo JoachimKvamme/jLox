@@ -176,6 +176,13 @@ public class Interpreter implements Expr.Visitor<Object>,
     }
 
     @Override
+    public Object visitSuperExpr(Expr.Super expr) {
+        int distance = locals.get(expr);
+        LoxClass superclass = (LoxClass)environment.getAt(distance, "super");
+        
+    }
+
+    @Override
     public Object visitThisExpr(Expr.This expr) {
         return lookUpVariable(expr.keyword, expr);
     }
@@ -352,6 +359,11 @@ public class Interpreter implements Expr.Visitor<Object>,
 
         environment.define(stmt.name.lexeme, null);
 
+        if (stmt.superclass != null) {
+            environment = new Environment(environment);
+            environment.define("super", superclass);
+        }
+
         Map<String, LoxFunction> methods = new HashMap<>();
         for (Stmt.Function method : stmt.methods) {
             LoxFunction function = new LoxFunction(method, environment, method.name.lexeme.equals("init"));
@@ -359,6 +371,10 @@ public class Interpreter implements Expr.Visitor<Object>,
         }
 
         LoxClass klass = new LoxClass(stmt.name.lexeme, (LoxClass)superclass, methods);
+
+        if (superclass != null) {
+            environment = environment.enclosing;
+        }
 
 
         environment.assign(stmt.name, klass);
