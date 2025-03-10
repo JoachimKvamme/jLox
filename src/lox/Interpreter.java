@@ -180,6 +180,8 @@ public class Interpreter implements Expr.Visitor<Object>,
         int distance = locals.get(expr);
 
         LoxClass superclass = (LoxClass)environment.getAt(distance, "super");
+
+        // Denne linjen kaster en feil i JAVA. Usikker på hvordan det skal fikses.
         LoxInstance object = (LoxInstance)environment.getAt(distance - 1, "this");
         
 
